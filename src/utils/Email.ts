@@ -34,6 +34,7 @@ class EmailQueue<T extends unknown = unknown, X extends unknown = unknown> {
 						reject(error);
 					} else {
 						log("Server is ready to send emails");
+						// @ts-ignore
 						$this.transporter = transporter;
 						resolve(transporter);
 					}
