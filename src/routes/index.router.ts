@@ -8,7 +8,7 @@ const indexRouter = Router();
 const Page = formatString(RedirectPage, { MediaRoute, PROJECT_Name, MAIN_URL });
 
 indexRouter.get("/", async (_req: Request, res: Response) => {
-  res.send(Page);
+    res.send(Page);
 });
 
 export default indexRouter;
