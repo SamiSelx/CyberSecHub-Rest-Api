@@ -1,5 +1,5 @@
 import { ToolModel } from "../../db/models/tool";
-import toolLogs, { IToolLogs, toolLogger } from "./auth.tool";
+import toolLogs, { IToolLogs, toolLogger } from "./tool.log";
 import { formatString } from "../../utils/Strings"
 import { HttpCodes } from "../../config/Errors";
 import { ErrorResponseC, SuccessResponseC } from "../services.response";
