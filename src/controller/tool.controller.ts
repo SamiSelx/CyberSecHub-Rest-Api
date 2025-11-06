@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import { SuccessResponse, ErrorResponse } from "../utils/Response";
 import { AuthTool } from "../services/auth/tool.service"
 import { SuccessResponseC, ErrorResponseC } from "../services/services.response";
+import { request } from "http";
 
 export const saveTool = async (request: Request, response: Response) => {
     const {
@@ -24,6 +25,18 @@ export const saveTool = async (request: Request, response: Response) => {
         name, githubURL, category, description,
         resources, usage, status
     );
+
+    if (result instanceof SuccessResponseC) {
+        return SuccessResponse(response, result.code, result.data, result.message, result.status);
+    }
+
+    if (result instanceof ErrorResponseC) {
+        return ErrorResponse(response, result.code, result.message, result.error);
+    }
+}
+
+export const getAllTools = async (request  : Request, response: Response) => {
+    const result = await AuthTool.executeGetAllTools();
 
     if (result instanceof SuccessResponseC) {
         return SuccessResponse(response, result.code, result.data, result.message, result.status);

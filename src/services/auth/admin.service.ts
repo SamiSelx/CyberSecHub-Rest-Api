@@ -13,14 +13,14 @@ export class AuthAdmin {
      */
     static executeLoadTools = async (): Promise<ResponseT> => {
         try {
-            const tools = await ToolModel.find({ status: "Pending" });
+            const tools = await ToolModel.find({ status: ToolStatus.PENDING });
             console.log(tools);
 
             const message = formatString(toolLogs.TOOLS_FOUND.message, tools);
 
             return new SuccessResponseC(
                 toolLogs.TOOLS_FOUND.type,
-                { tools, token: "" },
+                tools,
                 message,
                 HttpCodes.Accepted.code
             );
@@ -65,4 +65,6 @@ export class AuthAdmin {
             );
         }
     }
+
+
 }

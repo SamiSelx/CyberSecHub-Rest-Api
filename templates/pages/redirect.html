@@ -1,344 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="https://media.discordapp.net/attachments/1238570317308235859/1241248948459671623/logo_white.png?ex=664982aa&is=6648312a&hm=2fd956ed321ae193ef6b725ee3efdf86834a9deff3548db4d9c4da2635b8453a&=&format=webp&quality=lossless" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="white" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+		<link rel="manifest" href="{MediaRoute}/manifest.json" />
+		<title>Tesuto - Redirect</title>
+		<style>
+			body {
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml"
-        href="https://media.discordapp.net/attachments/1238570317308235859/1241248948459671623/logo_white.png?ex=664982aa&is=6648312a&hm=2fd956ed321ae193ef6b725ee3efdf86834a9deff3548db4d9c4da2635b8453a&=&format=webp&quality=lossless" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="white" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
-    <link rel="manifest" href="{MediaRoute}/manifest.json" />
-    <title>Tool Form</title>
-    <style>
-        body {
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .logo {
-            max-width: 200px;
-            width: 100%;
-            animation: pump 1s ease-in-out infinite alternate both;
-            transform-origin: center;
-        }
-
-        label,
-        input,
-        textarea,
-        select {
-            margin: 10px;
-        }
-
-        @keyframes pump {
-            from {
-                transform: scale(1);
-            }
-
-            to {
-                transform: scale(1.5);
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!--
-    <div>
-        <form>
-            <label for="tool-name">Tool Name</label><br>
-            <input id="tool-name" class="user-input" type="text" name="name" placeholder="Tool name" required><br>
-
-            <label for="url">Tool GitHub URL</label><br>
-            <input id="url" class="user-input" type="text" name="githubURL" placeholder="Tool Github URL" required><br>
-
-            <label for="category">Tool Category</label><br>
-            <select id="category" class="user-input" name="category" placeholder="Sup" required>
-                <option value="Pentesting">Pentesting</option>
-                <option value="OSINT">OSINT</option>
-                <option value="Reverse Engineering">Reverse Engineering</option>
-                <option value="Forensics">Forensics</option>
-                <option value="Exploitation">Exploitation</option>
-                <option value="Malware Analysis">Malware Analyis</option>
-                <option value="Networking">Networking</option>
-                <option value="Cryptography">Cryptography</option>
-                <option value="Cloud Security">Cloud Security</option>
-                <option value="Web Security">Web Security</option>
-            </select><br>
-
-            <label for="description">Short Description</label><br>
-            <textarea id="description" class="user-input" name="description" placeholder="Description"
-                required></textarea><br>
-
-            <label for="usage">Usage</label><br>
-            <textarea id="usage" class="user-input" name="usage" placeholder="Usage"></textarea><br>
-
-            <label for="resources">Resourses</label><br>
-            <input id="resources" class="user-input" type="text" name="resources" placeholder="Resourses"><br>
-
-            <button id="submit-btn" type="submit" value="Submit Tool">Submit Tool</button>
-        </form>
-    </div>
-
-    <script>
-        document.getElementById("submit-btn").addEventListener("click", async (event) => {
-            event.preventDefault();
-            const formData = {};
-
-            const userInput = document.querySelectorAll(".user-input");
-            
-            for (let i = 0; i < userInput.length; i++) {
-                const field = userInput[i];
-
-                if (field.required && !field.value) {
-                    console.error("All required fields need to be filled.");
-                    console.log('Empty field: ', field);
-                    alert("All required fields need to be filled.");
-                    return;
-                }
-
-                formData[field.name] = field.value;
-            };
-
-            const data = {
-                ...formData,
-                status: "Pending",
-            };
-
-            console.log('data is: ', data);
-
-            try {
-                const response = await fetch("/api/tool/tool-save", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const msg = await response.json();
-
-                console.log("response is: ", response);
-                console.log("msg is: ", msg);
-            }
-            catch (error) {
-                console.error(error);
-            }
-        });
-    </script>
-    
-
-    <style>
-        .card {
-            border: 3px solid rgba(255, 0, 0, 0.5);
-            border-radius: 5px;
-        }
-
-        .card label {
-            margin-top: 2px;
-            font-weight: bold;
-        }
-
-        .card label, .card h3 {
-            padding: 2px;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-    </style>
-
-    <div id="container">
-        <form class="card" data-id="09821093820">
-            <h3>Tool name</h3>
-            <label>Tool 1</label>
-
-            <h3>Tool GitHub URL</h3>
-            <label>Some url</label>
-
-            <h3>Tool Category</h3>
-            <label>Forensics</label>
-
-            <h3>Tool Description</h3>
-            <label>It lets u do things</label>
-
-            <h3>Tool Status</h3>
-            <label>Pending</label>
-            <br>
-
-            <label>Change Status</label>
-            <select class="reviews">
-                <option>Aprove</option>
-                <option>Deniy</option>
-            </select>
-        </form>
-
-        <form class="card" data-id="38376">
-            <h3>Tool name</h3>
-            <label>Tool 1</label>
-
-            <h3>Tool GitHub URL</h3>
-            <label>Some url</label>
-
-            <h3>Tool Category</h3>
-            <label>Forensics</label>
-
-            <h3>Tool Description</h3>
-            <label>It lets u do things</label>
-
-            <h3>Tool Status</h3>
-            <label>Pending</label>
-            <br>
-
-            <label>Change Status</label>
-            <select class="reviews">
-                <option>Aprove</option>
-                <option>Deniy</option>
-            </select>
-        </form>
-    </div>
-
-    <button id="load-tools" style="display: none;"></button>
-
-    <button id="submit-review">Submit Review</button>
-
-    <script>
-        document.getElementById("load-tools").addEventListener("click", async () => {
-            try {
-                const response = await fetch("/api/admin/load-tools");
-
-                if (!response.ok) {
-                    const message = `errorText: ${await response.text()}\nresponseStatus = ${response.status}`;
-                    throw new Error(message);
-                }
-
-                const data = await response.json();
-                const tools = data.data.tools;
-
-                let msg = "";
-                tools.forEach(tool => {
-                    msg += `
-                    name: ${tool.name}\n
-                    githubURL: ${tool.githubURL}\n
-                    category: ${tool.category}\n
-                    description: ${tool.description}\n
-                    resources: ${tool.resources}\n
-                    status: ${tool.status}\n
-                    usage: ${tool.usage}\n\n
-                    `;
-                });
-                document.getElementById("all-tools").innerHTML = msg;
-                console.log(tools);
-            }
-            catch (error) {
-                console.error(error);
-            }
-        });
-
-        document.getElementById("submit-review").addEventListener("click", async (event) => {
-            event.preventDefault();
-
-            const admin = {};
-            console.log("Reviewing tools now...")
-
-            document.querySelectorAll(".reviews").forEach(review => {
-                admin[review.parentElement.dataset.id] = review.value;
-            });
-
-            console.log(admin);
-        });
-    </script>
-    
-    <button id="submit-btn">Submit Tools</button>
-    <script>
-        document.getElementById("submit-btn").addEventListener("click", async () => {
-            const tool = {
-                name: "A really good tool",
-                githubURL: "shellmates.git.com/A really good tool",
-                category: "Forensics",
-                description: "It lets you do things",
-                resources: [
-                    {
-                        title: "Resource1",
-                        description: "Description1",
-                        url: "https://github.com/resource1"
-                    },
-                    {
-                        title: "Resource2",
-                        description: "Description2",
-                        url: "https://github.com/resource2"
-                    },
-                    {
-                        title: "Resource3",
-                        description: "Description3",
-                        url: "https://github.com/resource3"
-                    }
-                ],
-                usage: "U just use it like a tool",
-                status: "Pending",
-            };
-
-            try {
-                const response = await fetch("/api/tool/tool-save", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(tool)
-                });
-
-                if (!response.ok) {
-                    throw new Error("Some error occured :(");
-                }
-
-                console.log('Converting into text');
-                const text = await response.text();
-                const obj = JSON.parse(text);
-                console.log(obj.message);
-            }
-            catch (error) {
-                console.error(error);
-            }
-        });
-    </script>
-
--->
-
-    <button id="send-cat">Set Status</button>
-
-    <script>
-        document.getElementById('send-cat').addEventListener('click', async () => {
-            const obj = {
-                id: '6909fbc4e54ae7b625cdea14',
-                status: 'Approved'
-            }
-            
-            const response = await fetch('/api/admin/update-tool', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(obj)
-            });
-
-            if (!response.ok) {
-                throw new Error('Could not add cat');
-                console.error('Could not add cat');
-            }
-
-            const json = await response.json();
-
-            console.log('json: ', json);
-        })
-    </script>
-</body>
-
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				margin: 0;
+				background: #000;
+			}
+			.logo {
+				max-width: 200px;
+				width: 100%;
+				animation: pump 1s ease-in-out infinite alternate both;
+				transform-origin: center;
+			}
+			@keyframes pump {
+				from {
+					transform: scale(1);
+				}
+				to {
+					transform: scale(1.5);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="logo">
+			<img width="100%" src="https://media.discordapp.net/attachments/1238570317308235859/1241248948459671623/logo_white.png?ex=664982aa&is=6648312a&hm=2fd956ed321ae193ef6b725ee3efdf86834a9deff3548db4d9c4da2635b8453a&=&format=webp&quality=lossless" alt="Logo" />
+		</div>
+        
+		<script>
+			setTimeout(function () {
+				window.location.href = "https://github.com/Shellmates";
+			}, 2500);
+		</script>
+	</body>
 </html>

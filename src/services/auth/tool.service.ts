@@ -76,4 +76,28 @@ export class AuthTool {
             );
         }
     }
+
+        static executeGetAllTools = async ():Promise<ResponseT> => {
+        try {
+            const tools = await ToolModel.find({status: ToolStatus.APPROVED});
+
+            return new SuccessResponseC(
+                toolLogs.TOOLS_FOUND.type,
+                tools,
+                toolLogs.TOOLS_FOUND.message,
+                HttpCodes.Accepted.code
+            );
+        }
+        catch (error) {
+            const message = formatString(toolLogs.COULD_NOT_CONNECT.message, {
+                error: (error as Error)?.message || "",
+            });
+            toolLogger.error(message, error as Error);
+            return new ErrorResponseC(
+                toolLogs.COULD_NOT_CONNECT.type,
+                HttpCodes.InternalServerError.code,
+                message
+            );
+        }
+    }
 };

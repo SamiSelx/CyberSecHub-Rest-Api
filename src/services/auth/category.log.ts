@@ -4,7 +4,8 @@ export type ICategoryLogs =
     | 'CATEGORIES_NOT_FOUND'
     | 'CATEGORIES_FOUND'
     | 'CATEGORY_NOT_ADDED'
-    | 'CATEGORY_ADDED';
+    | 'CATEGORY_ADDED'
+    | 'CATEGORY_NOT_DELETED';
 
 export const categoryLogs: IErrors<ICategoryLogs> = {
     CATEGORIES_NOT_FOUND: {
@@ -26,7 +27,12 @@ export const categoryLogs: IErrors<ICategoryLogs> = {
         code: 3,
         message: 'Category added',
         type: 'CATEGORY_ADDED'
-    }
+    },
+    CATEGORY_NOT_DELETED: {
+        code: 4,
+        message: 'Category not deleted',
+        type: 'CATEGORY_NOT_DELETED'
+    },
 } as const;
 
 export default categoryLogs;

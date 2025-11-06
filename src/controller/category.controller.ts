@@ -30,3 +30,17 @@ export const AddCategory = async (request: Request, response: Response) => {
         return ErrorResponse(response, result.code, result.message, result.error);
     }
 }
+
+export const deleteCategory = async (request: Request, response: Response) => {
+    const {id} = request.params
+
+    const result = await AuthCategory.executeDeleteCategory(id);
+
+    if (result instanceof SuccessResponseC) {
+        return SuccessResponse(response, result.code, result.data, result.message, result.status);
+    }
+
+    if (result instanceof ErrorResponseC) {
+        return ErrorResponse(response, result.code, result.message, result.error);
+    }
+}
