@@ -24,3 +24,10 @@ export const AuthBack = async (req:MyRequest<UserD>,res:Response) => {
 	if (resulte instanceof SuccessResponseC) return SuccessResponse(res, resulte.code, resulte.data, resulte.message , resulte.status);
 	if (resulte instanceof ErrorResponseC) return ErrorResponse(res, resulte.code, resulte.message, resulte.error );
 }
+
+export const Logout = async (req: MyRequest<UserD>, res: Response,) => {
+	const user = req.user!;
+	const  result  = await AuthServices.executeLogout(user,res);
+	if (result instanceof SuccessResponseC) return SuccessResponse(res, result.code, result.data, result.message , result.status);
+	if (result instanceof ErrorResponseC) return ErrorResponse(res, result.code, result.message, result.error );
+}

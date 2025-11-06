@@ -32,6 +32,7 @@ export class AuthServices {
           const msg = formatString(resp.message, user.toObject());
           authLogger.info(msg, { type: resp.type });
           
+          res.cookie("token", token, getCookiesSettings(stay));
 
           return new SuccessResponseC(
             resp.type,
@@ -168,4 +169,37 @@ export class AuthServices {
       );
     }
   };
+
+  static executeLogout = async (
+    user: UserD,
+    res: Response
+  ): Promise<ResponseT> => {
+    try {
+      res.clearCookie("token",getCookiesSettings());
+          const resp: ICode<IAuthLogs> = authLogs.LOGOUT_SUCCESS;
+          const msg = formatString(resp.message, { 
+            email:user.email,
+            firstName:user.firstName,
+            lastName: user.lastName
+           });
+      authLogger.info(msg);
+      return new SuccessResponseC(
+        resp.type,
+        {},
+        msg,
+        HttpCodes.Accepted.code
+      );
+    } catch (err) {
+      const msg = formatString(authLogs.AUTH_ERROR_GENERIC.message, {
+        error: (err as Error)?.message || ""
+      });
+      authLogger.error(msg, err as Error);
+      return new ErrorResponseC(
+        authLogs.LOGIN_ERROR_GENERIC.type,
+        HttpCodes.InternalServerError.code,
+        msg
+      );
+    }
+  };
+  
 }
