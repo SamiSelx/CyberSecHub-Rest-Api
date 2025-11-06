@@ -100,4 +100,35 @@ export class AuthTool {
             );
         }
     }
-};
+    static executeGetToolByName = async (name: string):Promise<ResponseT> => {
+        try {
+            const tool = await ToolModel.findOne({ name: name, status: ToolStatus.APPROVED });
+            if (!tool) {
+                const message = formatString(toolLogs.TOOL_NOT_FOUND.message, { name });
+                toolLogger.error(message);
+                return new ErrorResponseC(
+                    toolLogs.TOOL_NOT_FOUND.type,
+                    HttpCodes.NotFound.code,
+                    message
+                );
+            }
+            return new SuccessResponseC(
+                toolLogs.TOOL_FOUND.type,
+                tool,
+                formatString(toolLogs.TOOL_FOUND.message, tool.toObject()),
+                HttpCodes.Accepted.code
+            );
+        }
+        catch (error) {
+            const message = formatString(toolLogs.COULD_NOT_CONNECT.message, {
+                error: (error as Error)?.message || "",
+            });
+            toolLogger.error(message, error as Error);
+            return new ErrorResponseC(
+                toolLogs.COULD_NOT_CONNECT.type,
+                HttpCodes.InternalServerError.code,
+                message
+            );
+        }
+    }
+}

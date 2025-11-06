@@ -6,7 +6,8 @@ export type IToolLogs =
     | "TOOL_FOUND"
     | "COULD_NOT_CONNECT"
     | "TOOLS_FOUND"
-    | "TOOLS_NOT_UPDATED";
+    | "TOOLS_NOT_UPDATED"
+    | "TOOL_NOT_FOUND";
 
 export const toolLogs: IErrors<IToolLogs> = {
     TOOL_SAVED: {
@@ -38,7 +39,12 @@ export const toolLogs: IErrors<IToolLogs> = {
         code: 5,
         message: "Tools could not be updated",
         type: "TOOLS_NOT_UPDATED"
-    }
+    },
+    TOOL_NOT_FOUND: {
+        code: 6,
+        message: "Tool not found in the database",
+        type: "TOOL_NOT_FOUND"
+    },
 } as const;
 
 export default toolLogs;
