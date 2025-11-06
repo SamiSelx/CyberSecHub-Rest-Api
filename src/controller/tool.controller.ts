@@ -46,3 +46,16 @@ export const getAllTools = async (request  : Request, response: Response) => {
         return ErrorResponse(response, result.code, result.message, result.error);
     }
 }
+
+export const getToolByName = async (request: Request, response: Response) => {
+    const { name } = request.params;
+    const result = await AuthTool.executeGetToolByName(name);
+
+    if (result instanceof SuccessResponseC) {
+        return SuccessResponse(response, result.code, result.data, result.message, result.status);
+    }
+
+    if (result instanceof ErrorResponseC) {
+        return ErrorResponse(response, result.code, result.message, result.error);
+    }
+}
