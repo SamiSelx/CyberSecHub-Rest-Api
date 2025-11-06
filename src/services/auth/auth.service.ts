@@ -16,21 +16,23 @@ export class AuthServices {
      * @returns  ResponseT
      */
 
-    static executeLogin = async (
-        email: string,
-        password: string,
-        stay: boolean,
-        res: Response
-    ): Promise<ResponseT> => {
-        try {
-            const user = await UserModel.findOne({ email });
-            if (user) {
-                const isPasswordMatch = await user.comparePasswords(password);
-                if (isPasswordMatch) {
-                    const token = Sign({ _id: user._id.toString(), role: user.role });
-                    const resp: ICode<IAuthLogs> = authLogs.LOGIN_SUCCESS;
-                    const msg = formatString(resp.message, user.toObject());
-                    authLogger.info(msg, { type: resp.type });
+  static executeLogin = async (
+    email: string,
+    password: string,
+    stay: boolean,
+    res: Response
+  ): Promise<ResponseT> => {
+    try {
+      const user = await UserModel.findOne({ email });
+      if (user) {
+        const isPasswordMatch = await user.comparePasswords(password);
+        if (isPasswordMatch) {
+          const token = Sign({ _id: user._id.toString(), role: user.role });
+          const resp: ICode<IAuthLogs> = authLogs.LOGIN_SUCCESS;
+          const msg = formatString(resp.message, user.toObject());
+          authLogger.info(msg, { type: resp.type });
+          
+          res.cookie("token", token, getCookiesSettings(stay));
 
 
                     return new SuccessResponseC(
@@ -84,88 +86,121 @@ export class AuthServices {
      * @returns {ResponseT}
      */
 
-    static executeRegister = async (
-        email: string,
-        password: string,
-        firstName: string,
-        lastName: string,
-        stay: boolean,
-        res: Response
-    ): Promise<ResponseT> => {
-        try {
-            const userExist = await UserModel.findOne({
-                email,
-            });
-            if (userExist) {
-                const msg = formatString(authLogs.REGISTER_ERROR_EMAIL_EXIST.message, {
-                    email,
-                });
-                authLogger.error(msg);
-                return new ErrorResponseC(
-                    authLogs.REGISTER_ERROR_EMAIL_EXIST.type,
-                    HttpCodes.BadRequest.code,
-                    msg
-                );
-            }
-            const user = new UserModel({ email, password, firstName, lastName });
-            await user.save();
-            const token = Sign({ _id: user._id.toString(), role: user.role });
-            res.cookie("token", token, getCookiesSettings(stay));
-            const resp: ICode<IAuthLogs> = authLogs.REGISTER_SUCCESS;
-            const msg = formatString(resp.message, user.toObject());
-            authLogger.info(msg, { type: resp.type });
-            res.cookie("token", token, getCookiesSettings(stay));
-            const job = {
-                to: email,
-                subject: "Account Created",
-                text: "Your account has been created successfully"
-            }
-            emailQueue.add(job, { attempts: 3 })
-            return new SuccessResponseC(
-                resp.type,
-                { ...user.Optimize(), token: token },
-                msg,
-                HttpCodes.Created.code
-            );
-        } catch (err) {
-            const msg = formatString(authLogs.REGISTER_ERROR_GENERIC.message, {
-                error: (err as Error)?.message || "",
-                email,
-            });
-            authLogger.error(msg, err as Error);
-            return new ErrorResponseC(
-                authLogs.REGISTER_ERROR_GENERIC.type,
-                HttpCodes.InternalServerError.code,
-                msg
-            );
-        }
-    };
-    static executeAuthBack = async (user: UserD, stay: boolean, res: Response) => {
-        try {
-            let msg = formatString(authLogs.AUTH_BACK.message, {
-                email: user.email,
-                username: user.firstName + " " + user.lastName,
-            });
-            authLogger.info(msg, { type: authLogs.AUTH_BACK.type });
-            const token = Sign({ _id: user.id.toString(), role: user.role });
-            res.cookie("token", token, getCookiesSettings(stay));
-            return new SuccessResponseC(
-                authLogs.AUTH_BACK.type,
-                user.Optimize(),
-                msg,
-                HttpCodes.Accepted.code
-            );
-        } catch (err) {
-            const msg = formatString(authLogs.AUTH_ERROR_GENERIC.message, {
-                error: (err as Error)?.message || "",
-                email: user.email,
-            });
-            authLogger.error(msg, err as Error);
-            return new ErrorResponseC(
-                authLogs.AUTH_ERROR_GENERIC.type,
-                HttpCodes.InternalServerError.code,
-                msg
-            );
-        }
-    };
+  static executeRegister = async (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    stay: boolean,
+    res : Response
+  ): Promise<ResponseT> => {
+    try {
+      const userExist = await UserModel.findOne({
+        email,
+      });
+      if (userExist) {
+        const msg = formatString(authLogs.REGISTER_ERROR_EMAIL_EXIST.message, {
+          email,
+        });
+        authLogger.error(msg);
+        return new ErrorResponseC(
+          authLogs.REGISTER_ERROR_EMAIL_EXIST.type,
+          HttpCodes.BadRequest.code,
+          msg
+        );
+      }
+      const user = new UserModel({ email, password, firstName, lastName });
+      await user.save();
+      const token = Sign({ _id: user._id.toString(), role: user.role });
+      res.cookie("token", token, getCookiesSettings(stay));
+      const resp: ICode<IAuthLogs> = authLogs.REGISTER_SUCCESS;
+      const msg = formatString(resp.message, user.toObject());
+      authLogger.info(msg, { type: resp.type });
+      res.cookie("token", token, getCookiesSettings(stay));
+          const job = {
+            to: email,
+            subject:"Account Created",
+            text:"Your account has been created successfully"
+          }
+          emailQueue.add(job,{attempts:3})
+      return new SuccessResponseC(
+        resp.type,
+        { ...user.Optimize(), token: token },
+        msg,
+        HttpCodes.Created.code
+      );
+    } catch (err) {
+      const msg = formatString(authLogs.REGISTER_ERROR_GENERIC.message, {
+        error: (err as Error)?.message || "",
+        email,
+      });
+      authLogger.error(msg, err as Error);
+      return new ErrorResponseC(
+        authLogs.REGISTER_ERROR_GENERIC.type,
+        HttpCodes.InternalServerError.code,
+        msg
+      );
+    }
+  };
+  static executeAuthBack = async (user: UserD , stay : boolean , res : Response) => {
+    try {
+      let msg = formatString(authLogs.AUTH_BACK.message, {
+        email: user.email,
+        username: user.firstName + " " + user.lastName,
+      });
+      authLogger.info(msg, { type: authLogs.AUTH_BACK.type });
+      const token = Sign({ _id: user.id.toString(), role: user.role });
+      res.cookie("token", token, getCookiesSettings(stay));
+      return new SuccessResponseC(
+        authLogs.AUTH_BACK.type,
+        user.Optimize(),
+        msg,
+        HttpCodes.Accepted.code
+      );
+    } catch (err) {
+      const msg = formatString(authLogs.AUTH_ERROR_GENERIC.message, {
+        error: (err as Error)?.message || "",
+        email: user.email,
+      });
+      authLogger.error(msg, err as Error);
+      return new ErrorResponseC(
+        authLogs.AUTH_ERROR_GENERIC.type,
+        HttpCodes.InternalServerError.code,
+        msg
+      );
+    }
+  };
+
+  static executeLogout = async (
+    user: UserD,
+    res: Response
+  ): Promise<ResponseT> => {
+    try {
+      res.clearCookie("token",getCookiesSettings());
+          const resp: ICode<IAuthLogs> = authLogs.LOGOUT_SUCCESS;
+          const msg = formatString(resp.message, { 
+            email:user.email,
+            firstName:user.firstName,
+            lastName: user.lastName
+           });
+      authLogger.info(msg);
+      return new SuccessResponseC(
+        resp.type,
+        {},
+        msg,
+        HttpCodes.Accepted.code
+      );
+    } catch (err) {
+      const msg = formatString(authLogs.AUTH_ERROR_GENERIC.message, {
+        error: (err as Error)?.message || ""
+      });
+      authLogger.error(msg, err as Error);
+      return new ErrorResponseC(
+        authLogs.LOGIN_ERROR_GENERIC.type,
+        HttpCodes.InternalServerError.code,
+        msg
+      );
+    }
+  };
+  
 }
