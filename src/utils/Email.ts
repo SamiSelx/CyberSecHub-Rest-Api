@@ -12,11 +12,11 @@ import { log } from "./Function";
 const mailLogger = new Logger("mail");
 
 class EmailQueue<T extends unknown = unknown, X extends unknown = unknown> {
-    //queue: Promise<any>;
+    queue: Promise<any>;
     transporter: Transporter<SMTPTransport.SentMessageInfo> | null = null;
     constructor() {
         let $this = this;
-        /*
+        
         this.queue = new Promise((resolve, reject) => {
             EnvEmitter.addListener("loaded", () => {
                 const transporter = nodemailer.createTransport({
@@ -44,15 +44,15 @@ class EmailQueue<T extends unknown = unknown, X extends unknown = unknown> {
         }).catch((err) => {
             console.error(err);
             //exitProcess(ExitCodes.EMAIL_ERROR_GENERIC, { error: err?.message || String(err) });
-        });*/
+        });
     }
-/*
+
     addEmail(options: Mail.Options) {
         return (this.queue = this.transporter!.sendMail({ ...options, from: EmailUser }).then((info) => {
             mailLogger.info("Email sent successfully!", info);
         }));
     }
-        */
+    
 }
 
 const emailQueue = new EmailQueue();

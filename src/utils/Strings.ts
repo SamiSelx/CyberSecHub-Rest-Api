@@ -4,8 +4,7 @@
  * @param data - An object containing key-value pairs to replace placeholders in the template string.
  * @returns The formatted string with placeholders replaced by corresponding values from the data object.
  */
-export function formatString(template: string, data: Record<string, any> | null): string {
-    if (!data) return ''
+export function formatString(template: string, data: Record<string, any>): string {
 	return template.replace(/{(\w+)}/g, (match, key) => (data.hasOwnProperty(key) ? String(data[key]) : match));
 }
 /**
