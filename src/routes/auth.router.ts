@@ -11,6 +11,7 @@ const authRouter = Router();
 
 authRouter.route("/login").post(loginValidators, validator, SignIn);
 authRouter.route("/register").post(registerValidators, validator, SignUp);
+
 authRouter.route("/").get(checkLogs,isLoggedIn,AuthBack);
 authRouter.route("/logout").get(checkLogs,isLoggedIn,Logout)
 

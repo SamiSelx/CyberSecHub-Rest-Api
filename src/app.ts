@@ -1,10 +1,10 @@
 // Import necessary configuration and modules
 import {
-  PORT,
-  InDev,
-  StaticRoot,
-  MediaRoute,
-  Static_Cache_Age,
+    PORT,
+    InDev,
+    StaticRoot,
+    MediaRoute,
+    Static_Cache_Age,
 } from "./config/Env";
 import "./utils/Events";
 import "./config/CheckableEnv";
@@ -40,7 +40,7 @@ export const app = express();
  * Configure serving static files from the specified root directory if `StaticRoot` is set.
  */
 if (StaticRoot)
-  app.use(MediaRoute, express.static(StaticRoot, { maxAge: Static_Cache_Age }));
+    app.use(MediaRoute, express.static(StaticRoot, { maxAge: Static_Cache_Age }));
 
 /**
  * Enable CORS middleware based on the environment.
@@ -85,11 +85,11 @@ app.set("trust proxy", true);
  * Route to handle requests that do not match any defined routes, returning a 404 response.
  */
 app.use("*", (req, res, next) =>
-  ErrorResponse(
-    res,
-    HttpCodes.NotImplemented.code,
-    HttpCodes.NotImplemented.message
-  )
+    ErrorResponse(
+        res,
+        HttpCodes.NotImplemented.code,
+        HttpCodes.NotImplemented.message
+    )
 );
 
 /**
@@ -102,25 +102,23 @@ app.use(errorMiddleware);
  */
 
 if (process.env.NODE_ENV !== "test") {
-  System.Start().then(async () => {
-    app.listen(PORT, () => {
-      // Display server and backend URLs upon successful server start.
-      const port_msg = `Server running on port: ${PORT}.`;
-      const url_msg = `The backend is open in:  http://localhost:${PORT} .`;
-      const max_length = Math.max(url_msg.length, port_msg.length) + 4;
-      const n = Math.floor((max_length - port_msg.length) / 2);
-      const m = Math.floor((max_length - url_msg.length) / 2);
+    System.Start().then(async () => {
+        app.listen(PORT, () => {
+            // Display server and backend URLs upon successful server start.
+            const port_msg = `Server running on port: ${PORT}.`;
+            const url_msg = `The backend is open in:  http://localhost:${PORT} .`;
+            const max_length = Math.max(url_msg.length, port_msg.length) + 4;
+            const n = Math.floor((max_length - port_msg.length) / 2);
+            const m = Math.floor((max_length - url_msg.length) / 2);
 
-      console.log(" " + "-".repeat(max_length));
-      console.log(`|${" ".repeat(n)}${port_msg}${" ".repeat(n)}|`);
-      console.log(`|${" ".repeat(m)}${url_msg}${" ".repeat(m)}|`);
-      console.log(" " + "-".repeat(max_length));
+            console.log(" " + "-".repeat(max_length));
+            console.log(`|${" ".repeat(n)}${port_msg}${" ".repeat(n)}|`);
+            console.log(`|${" ".repeat(m)}${url_msg}${" ".repeat(m)}|`);
+            console.log(" " + "-".repeat(max_length));
+        });
     });
-  });
 }
 
 export async function StopServer() {
-  await System.Stop();
+    await System.Stop();
 }
-
-

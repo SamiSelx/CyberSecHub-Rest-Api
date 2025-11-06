@@ -1,38 +1,55 @@
 import { CookieOptions } from "express";
 import { randomBytes } from "crypto";
-export function validateEmail(email: string) {
-	if (email) return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(email);
-	return true;
-}
+import { ToolCategory } from "../types/Tool";
 
+export function validateEmail(email: string) {
+    if (email) return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(email);
+    return true;
+}
 
 export function log(message: string, ...optionalParams: any[]) {
-	if (process.env.NODE_ENV !== "test") {
-		console.log(message, ...optionalParams);
-	}
+    if (process.env.NODE_ENV !== "test") {
+        console.log(message, ...optionalParams);
+    }
 }
-
 
 export function RandomEmail() {
-	return Math.random().toString(36).substring(7) + "@gmail.com";
+    return Math.random().toString(36).substring(7) + "@gmail.com";
 }
 
-
 export function RandomPassword() {
-	return randomBytes(10).toString("hex")
+    return randomBytes(10).toString("hex")
 }
 
 export function RandomString() {
-	return Math.random().toString(36).substring(8);
+    return Math.random().toString(36).substring(8);
 }
 
-
-
 export function getCookiesSettings(stay: boolean = false): CookieOptions {
-	return {
-		sameSite: "none",
-		secure: true,
-		httpOnly: true,
-		...(stay ? { expires: new Date(new Date().getTime() + (720000000 * 4)) } : {}),
-	};
+    return {
+        sameSite: "none",
+        secure: true,
+        httpOnly: true,
+        ...(stay ? { expires: new Date(new Date().getTime() + (720000000 * 4)) } : {}),
+    };
+}
+
+export function validateURL(url: string): boolean {
+    if (!url.startsWith("http://") || !url.startsWith("https://") || url.includes(" ") || url.includes("--") || url.split(".").length === 0) {
+        return false;
+    }
+
+    return true;
+}
+
+export function validateCategory(toolCategory: string): boolean {
+    const categories = ["Pentesting", "OSINT", "Reverse Engineering", "Forensics", "Exploitation", "Malware Analyis", "Networking", "Cryptography", "Cloud Security", "Web Security"];
+
+    categories.forEach(category => {
+        if (toolCategory === category) {
+            return true;
+        }
+    });
+
+    return false;
 }

@@ -4,17 +4,17 @@ import { formatString } from "../../utils/Strings";
 import { Sign } from "../../utils/jwt";
 import { HttpCodes } from "../../config/Errors";
 import { ErrorResponseC, SuccessResponseC } from "./../services.response";
-import {Response } from "express";
+import { Response } from "express";
 import { getCookiesSettings } from "../../utils/Function";
 import { emailQueue } from "../../queues/email.queue";
 
 export class AuthServices {
-  /**
-   * @description  Login a user
-   * @param email  - String
-   * @param password - String
-   * @returns  ResponseT
-   */
+    /**
+     * @description  Login a user
+     * @param email  - String
+     * @param password - String
+     * @returns  ResponseT
+     */
 
   static executeLogin = async (
     email: string,
@@ -34,56 +34,57 @@ export class AuthServices {
           
           res.cookie("token", token, getCookiesSettings(stay));
 
-          return new SuccessResponseC(
-            resp.type,
-            { ...user.Optimize() , token: token},
-            msg,
-            HttpCodes.Accepted.code
-          );
-          
-        }
-        const msg = formatString(
-          authLogs.LOGIN_ERROR_INCORRECT_PASSWORD_FOUND.message,
-          { email }
-        );
-        authLogger.error(msg);
-        return new ErrorResponseC(
-          authLogs.LOGIN_ERROR_INCORRECT_PASSWORD_FOUND.type,
-          HttpCodes.Unauthorized.code,
-          msg
-        );
-      }
-      const msg = formatString(authLogs.LOGIN_ERROR_EMAIL_NOT_FOUND.message, {
-        email,
-      });
-      authLogger.error(msg);
-      return new ErrorResponseC(
-        authLogs.LOGIN_ERROR_EMAIL_NOT_FOUND.type,
-        HttpCodes.NotFound.code,
-        msg
-      );
-    } catch (err) {
-      const msg = formatString(authLogs.LOGIN_ERROR_GENERIC.message, {
-        error: (err as Error)?.message || "",
-        email,
-      });
-      authLogger.error(msg, err as Error);
-      return new ErrorResponseC(
-        authLogs.LOGIN_ERROR_GENERIC.type,
-        HttpCodes.InternalServerError.code,
-        msg
-      );
-    }
-  };
 
-  /**
-   * @description Register a user
-   * @param email  - String
-   * @param password  - String
-   * @param firstName  - String
-   * @param lastName  - String
-   * @returns {ResponseT}
-   */
+                    return new SuccessResponseC(
+                        resp.type,
+                        { ...user.Optimize(), token: token },
+                        msg,
+                        HttpCodes.Accepted.code
+                    );
+
+                }
+                const msg = formatString(
+                    authLogs.LOGIN_ERROR_INCORRECT_PASSWORD_FOUND.message,
+                    { email }
+                );
+                authLogger.error(msg);
+                return new ErrorResponseC(
+                    authLogs.LOGIN_ERROR_INCORRECT_PASSWORD_FOUND.type,
+                    HttpCodes.Unauthorized.code,
+                    msg
+                );
+            }
+            const msg = formatString(authLogs.LOGIN_ERROR_EMAIL_NOT_FOUND.message, {
+                email,
+            });
+            authLogger.error(msg);
+            return new ErrorResponseC(
+                authLogs.LOGIN_ERROR_EMAIL_NOT_FOUND.type,
+                HttpCodes.NotFound.code,
+                msg
+            );
+        } catch (err) {
+            const msg = formatString(authLogs.LOGIN_ERROR_GENERIC.message, {
+                error: (err as Error)?.message || "",
+                email,
+            });
+            authLogger.error(msg, err as Error);
+            return new ErrorResponseC(
+                authLogs.LOGIN_ERROR_GENERIC.type,
+                HttpCodes.InternalServerError.code,
+                msg
+            );
+        }
+    };
+
+    /**
+     * @description Register a user
+     * @param email  - String
+     * @param password  - String
+     * @param firstName  - String
+     * @param lastName  - String
+     * @returns {ResponseT}
+     */
 
   static executeRegister = async (
     email: string,

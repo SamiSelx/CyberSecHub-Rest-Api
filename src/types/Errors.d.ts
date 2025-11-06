@@ -3,7 +3,9 @@ interface ICode<T = string> {
 	message: string;
 	type: T;
 }
+
 type IErrors<T extends string | symbol | number = string> = Record<T, ICode<T>>;
+
 // exit codes
 type IExitCodes =
 	| "SUCCESS"
@@ -80,5 +82,3 @@ type IHttpStatusCodes =
 	| "LoopDetected"
 	| "NotExtended"
 	| "NetworkAuthenticationRequired";
-
-
