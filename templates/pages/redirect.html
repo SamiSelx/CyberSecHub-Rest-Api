@@ -131,7 +131,7 @@
             }
         });
     </script>
-    -->
+    
 
     <style>
         .card {
@@ -255,6 +255,89 @@
 
             console.log(admin);
         });
+    </script>
+    
+    <button id="submit-btn">Submit Tools</button>
+    <script>
+        document.getElementById("submit-btn").addEventListener("click", async () => {
+            const tool = {
+                name: "A really good tool",
+                githubURL: "shellmates.git.com/A really good tool",
+                category: "Forensics",
+                description: "It lets you do things",
+                resources: [
+                    {
+                        title: "Resource1",
+                        description: "Description1",
+                        url: "https://github.com/resource1"
+                    },
+                    {
+                        title: "Resource2",
+                        description: "Description2",
+                        url: "https://github.com/resource2"
+                    },
+                    {
+                        title: "Resource3",
+                        description: "Description3",
+                        url: "https://github.com/resource3"
+                    }
+                ],
+                usage: "U just use it like a tool",
+                status: "Pending",
+            };
+
+            try {
+                const response = await fetch("/api/tool/tool-save", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(tool)
+                });
+
+                if (!response.ok) {
+                    throw new Error("Some error occured :(");
+                }
+
+                console.log('Converting into text');
+                const text = await response.text();
+                const obj = JSON.parse(text);
+                console.log(obj.message);
+            }
+            catch (error) {
+                console.error(error);
+            }
+        });
+    </script>
+
+-->
+
+    <button id="send-cat">Set Status</button>
+
+    <script>
+        document.getElementById('send-cat').addEventListener('click', async () => {
+            const obj = {
+                id: '6909fbc4e54ae7b625cdea14',
+                status: 'Approved'
+            }
+            
+            const response = await fetch('/api/admin/update-tool', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            });
+
+            if (!response.ok) {
+                throw new Error('Could not add cat');
+                console.error('Could not add cat');
+            }
+
+            const json = await response.json();
+
+            console.log('json: ', json);
+        })
     </script>
 </body>
 

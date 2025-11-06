@@ -1,4 +1,4 @@
-import { ToolModel } from "../../db/models/tool"
+   import { ToolModel } from "../../db/models/tool"
 import toolLogs, { IToolLogs, toolLogger } from "./tool.log"
 import { formatString } from "../../utils/Strings"
 import { HttpCodes } from "../../config/Errors"
@@ -38,14 +38,17 @@ export class AuthAdmin {
         }
     }
 
-    static executeUpdatingTools = async (tools: Array<OptimizedTool>): Promise<ResponseT> => {
+    static executeUpdatingTool = async (id: string, status: string): Promise<ResponseT> => {
         try {
-            const response = await ToolModel.updateMany({ });
+            const response = await ToolModel.updateOne(
+                { _id: id },
+                { $set: { status: status } }
+            );
 
-            const message = formatString(toolLogs.TOOLS_FOUND.message, tools);
+            const message = formatString(toolLogs.TOOLS_FOUND.message, response);
             return new SuccessResponseC(
                 toolLogs.TOOLS_FOUND.type,
-                { tools, token: "" },
+                response,
                 message,
                 HttpCodes.Accepted.code
             );

@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export enum ToolCategory {
     PENTESTING = "Pentesting",
     OSINT = "OSINT",
@@ -9,6 +11,10 @@ export enum ToolCategory {
     CRYPTOGRAPHY = "Cryptography",
     CLOUD_SECURITY = "Cloud Security",
     WEB_SECURITY = "Web Security"
+}
+
+export declare type Category = {
+    name: string;
 }
 
 export declare type Resources = {
@@ -26,10 +32,10 @@ export enum ToolStatus {
 export declare interface ToolInterface {
     name: string;
     githubURL: string;
-    category: ToolCategory;
+    category: string;
     description: string;
+    resources: Resources[] | null;
     usage: string | null;
-    resources: string;
     status: ToolStatus;
 }
 

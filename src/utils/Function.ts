@@ -1,5 +1,6 @@
 import { CookieOptions } from "express";
 import { randomBytes } from "crypto";
+import { ToolCategory } from "../types/Tool";
 
 export function validateEmail(email: string) {
     if (email) return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(email);
@@ -34,12 +35,21 @@ export function getCookiesSettings(stay: boolean = false): CookieOptions {
 }
 
 export function validateURL(url: string): boolean {
-    if (url.startsWith("") || 
-        url.split(".").length === 0 ||
-        url.includes(" ") ||
-        url.includes("--")) {
+    if (!url.startsWith("http://") || !url.startsWith("https://") || url.includes(" ") || url.includes("--") || url.split(".").length === 0) {
         return false;
     }
 
     return true;
+}
+
+export function validateCategory(toolCategory: string): boolean {
+    const categories = ["Pentesting", "OSINT", "Reverse Engineering", "Forensics", "Exploitation", "Malware Analyis", "Networking", "Cryptography", "Cloud Security", "Web Security"];
+
+    categories.forEach(category => {
+        if (toolCategory === category) {
+            return true;
+        }
+    });
+
+    return false;
 }

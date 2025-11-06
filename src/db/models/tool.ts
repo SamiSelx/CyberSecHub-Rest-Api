@@ -1,5 +1,5 @@
 import { Model, Schema, model, Document } from 'mongoose'
-import { validateURL } from '../../utils/Function';
+import { validateURL, validateCategory } from '../../utils/Function';
 import { ToolCategory, Resources, ToolStatus, ToolInterface, OptimizedTool } from '../../types/Tool'
 
 const required = true;
@@ -16,11 +16,15 @@ export interface ToolModel extends Model<ToolDocument> {
 const toolSchema = new Schema<ToolInterface>(
     {
         name: { type: String, required: true },
-        githubURL: { type: String, required: true, validate: [validateURL, "Please provide a valid URL"] },
-        category: { type: String, required: true, enum: Object.values(ToolCategory) },
+        githubURL: { type: String, required: true },
+        category: { type: String, required: true },
         description: { type: String, required: true },
         usage: { type: String },
-        resources: { type: String },
+        resources: [{
+            title: { type: String },
+            description: { type: String },
+            url: { type: String }
+        }],
         status: { type: String, required, enum: Object.values(ToolStatus) },
     },
     {

@@ -14,3 +14,21 @@ export const LoadTools = async (request: Request, response: Response) => {
         return ErrorResponse(response, result.code, result.message, result.error);
     }
 }
+
+export const UpdateTool = async (request: Request, response: Response) => {
+    const { id, status } = request.body;
+
+    console.log('controller')
+    console.log('id: ', id);
+            console.log('status: ', status);
+
+    const result = await AuthAdmin.executeUpdatingTool(id, status);
+
+    if (result instanceof SuccessResponseC) {
+        return SuccessResponse(response, result.code, result.data, result.message, result.status);
+    }
+
+    if (result instanceof ErrorResponseC) {
+        return ErrorResponse(response, result.code, result.message, result.error);
+    }
+}

@@ -10,19 +10,19 @@ export const saveTool = async (request: Request, response: Response) => {
         status
     } = request.body;
 
-    console.log(`\nname: ${name}\n
+    console.log(`Object received:\n
+        name: ${name}\n
         githubURL: ${githubURL}\n
         category: ${category}\n
         description: ${description}\n
         usage: ${usage}\n
-        resources: ${resources}\n
+        resources: ${JSON.stringify(resources)}\n
         status: ${status}\n
     `);
 
     const result = await AuthTool.executeSaveTool(
-        name, githubURL, category,
-        description, usage, resources,
-        status
+        name, githubURL, category, description,
+        resources, usage, status
     );
 
     if (result instanceof SuccessResponseC) {

@@ -5,7 +5,7 @@ import { HttpCodes } from "../../config/Errors";
 import { ErrorResponseC, SuccessResponseC } from "../services.response";
 import { Sign } from "../../utils/jwt"
 import { Response } from "express";
-import { ToolCategory, ToolStatus } from "../../types/Tool"
+import { ToolCategory, ToolStatus, Resources } from "../../types/Tool"
 
 export class AuthTool {
     /**
@@ -21,14 +21,14 @@ export class AuthTool {
     static executeSaveTool = async (
         name: string,
         githubURL: string,
-        category: ToolCategory,
+        category: string,
         description: string,
-        resources: string | null,
+        resources: Resources[] | null,
         usage: string | null,
         status: ToolStatus = ToolStatus.PENDING,
-    ): Promise<ResponseT> => {
+    ) => {
         try {
-            // Check if the tool is already saved in the database
+            /* Check if the tool is already saved in the database
             const toolExsists = await ToolModel.findOne({ githubURL });
             if (toolExsists) {
                 const message = formatString(toolLogs.TOOL_FOUND.message, {
@@ -40,6 +40,7 @@ export class AuthTool {
                     message
                 );
             }
+            */
 
             // If tool is not found, then we insert it into the database
             const tool = await ToolModel.create({
@@ -58,7 +59,7 @@ export class AuthTool {
 
             return new SuccessResponseC(
                 resp.type,
-                { ...tool.Optimize(), token: token},
+                tool,
                 message,
                 HttpCodes.Accepted.code
             );
