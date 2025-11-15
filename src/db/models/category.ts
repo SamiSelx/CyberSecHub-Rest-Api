@@ -14,7 +14,7 @@ export interface CategoryModel extends Model<CategoryDocument> {
 
 export const categorySchema = new Schema<Category>(
     {
-        name: { type: String, required }
+        name: { type: String, required, unique: true },
     },
     {
         strict: false

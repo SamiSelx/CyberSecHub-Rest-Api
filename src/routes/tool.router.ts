@@ -8,7 +8,7 @@ const toolRouter = Router();
 toolRouter.post("/tool-save", saveTool);
 toolRouter.get("/all",getAllTools);
 toolRouter.get("/:name",getToolByName)
-toolRouter.route("/pending-tools").get(checkLogs,isLoggedIn,isAdmin, LoadTools);
+toolRouter.route("/get/pending-tools").get(checkLogs,isLoggedIn,isAdmin, LoadTools);
 toolRouter.route("/update").put(checkLogs,isLoggedIn,isAdmin, UpdateTool);
 
 export default toolRouter;
